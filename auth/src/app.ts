@@ -5,8 +5,7 @@ import  { currentUserRouter } from './routes/current-user'
 import { signinRouter } from './routes/signin'
 import { signupRouter } from './routes/signup'
 import { signoutRouter } from './routes/signout'
-import { errorHandler } from './middleware/error-handler'
-import { NotFoundError } from './errors/not-found-error'
+import { errorHandler, NotFoundError } from '@ke-tickets/common'
 import cookieSession from 'cookie-session'
 
 const app = express()
