@@ -14,7 +14,7 @@ declare global {
 
 global.signin = () => {
   const payload = {
-    id: 'asdf987',
+    id: mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com'
   }
   const token = jwt.sign(payload, process.env.JWT_KEY!)
