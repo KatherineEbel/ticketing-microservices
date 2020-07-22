@@ -2,6 +2,8 @@ import request from 'supertest'
 import { app } from '../../app'
 import { Ticket } from '../../models/ticket'
 
+import { stan } from '../../nats-client'
+
 it (`has a route handler listening to /api/tickets for post requests`, async function () {
   let response = await request(app)
     .post(`/api/tickets`)
@@ -78,4 +80,16 @@ it(`creates a ticket with valid inputs`, async function () {
   expect(tickets.length).toEqual(1)
   expect(tickets[0].title).toEqual('Test Title')
   expect(tickets[0].price).toEqual(20)
+})
+
+it (`publishes an event`, async () => {
+  await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', global.signin())
+    .send({
+      title: 'Test Title',
+      price: 10,
+    })
+    .expect(201)
+  expect(stan.client.publish).toHaveBeenCalled()
 })
