@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "publish": "ts-node-dev --rs src/publisher.ts",
-    "listen": "ts-node-dev --rs src/listener.ts"
+    "publish": "ts-node-dev --rs --notify false src/publisher.ts",
+    "listen": "ts-node-dev --rs --notify false  src/listener.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@types/node": "^14.0.22",
     "node-nats-streaming": "^0.3.2",
-    "ts-node-dev": "^1.0.0-pre.51",
+    "ts-node-dev": "^1.0.0-pre.52",
     "typescript": "^3.9.6"
   }
 }

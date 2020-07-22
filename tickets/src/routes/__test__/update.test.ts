@@ -1,6 +1,7 @@
 import request from 'supertest'
-import { app } from '../app'
+import { app } from '../../app'
 import { Types } from 'mongoose'
+import { stan } from '../../nats-client'
 
 it(`returns 404 if ticket does not exist`, async () => {
   await request(app)
@@ -93,4 +94,17 @@ it(`updates ticket if user provides valid update`, async () => {
   response = await request(app).get(`/api/tickets/${ticketId}`)
   expect(response.body.title).toEqual(`updated ticket`)
   expect(response.body.price).toEqual(30)
+})
+
+it (`publishes an event`, async () => {
+  const cookie = global.signin()
+  let response = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: `ticket`,
+      price: 20,
+    })
+    .expect(201)
+  expect(stan.client.publish).toHaveBeenCalled()
 })

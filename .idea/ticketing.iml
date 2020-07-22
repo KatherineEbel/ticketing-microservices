@@ -9,5 +9,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ticketing-common" />
+    <orderEntry type="module" module-name="ticketing-common" />
+    <orderEntry type="module" module-name="ticketing-common" />
+    <orderEntry type="module" module-name="ticketing-common" />
   </component>
 </module>
