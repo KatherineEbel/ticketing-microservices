@@ -4,6 +4,8 @@ import { body } from 'express-validator'
 import { Types } from 'mongoose'
 import { Ticket } from '../models/ticket'
 import { Order, OrderStatus } from '../models/order'
+import { OrderCreatedPublisher } from '../publishers/order-created-publisher'
+import { stan } from '../nats-client'
 
 const router = express.Router()
 
@@ -35,8 +37,19 @@ router.post(`/api/orders`,
       expiresAt,
       ticket
     })
-    // Publish and event about created order
     await order.save()
+    // Publish and event about created order
+    await new OrderCreatedPublisher(stan.client).publish({
+      id: order.id,
+      status: order.status,
+      expiresAt: order.expiresAt.toISOString(),
+      ticket: {
+        id: order.ticket.id,
+        price: order.ticket.price
+      },
+      userId: order.userId
+    })
+
     res.status(201).send(order)
 })
 

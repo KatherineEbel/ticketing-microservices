@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express'
 import { BadRequestError, NotAuthorizedError, NotFoundError, requireAuth } from '@ke-tickets/common'
 import { Order, OrderStatus } from '../models/order'
 import { Types } from 'mongoose'
+import { OrderCancelledPublisher } from '../publishers/order-cancelled-publisher'
+import { stan } from '../nats-client'
 
 const router = express.Router()
 
@@ -10,7 +12,7 @@ router.patch(`/api/orders/:id`, requireAuth, async (req: Request, res: Response)
   if (!Types.ObjectId.isValid(id)) {
     throw new BadRequestError(`Bad Request`)
   }
-  let order = await Order.findById(id)
+  let order = await Order.findById(id).populate(`ticket`)
   if (!order) {
     throw new NotFoundError()
   }
@@ -19,6 +21,11 @@ router.patch(`/api/orders/:id`, requireAuth, async (req: Request, res: Response)
   }
   order.status = OrderStatus.Cancelled
   await order.save()
+
+  await new OrderCancelledPublisher(stan.client).publish({
+    ticketId: order.ticket.id,
+    userId: order.userId,
+  })
   res.status(204).send(order)
 })
 

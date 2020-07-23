@@ -1,8 +1,9 @@
 import request from 'supertest'
 import { Types } from 'mongoose'
 import { app } from '../../app'
-import { Ticket } from '../../models/ticket'
+import { Ticket, TicketDoc } from '../../models/ticket'
 import { Order, OrderStatus } from '../../models/order'
+import { stan } from '../../nats-client'
 
   it (`returns an error if the ticket does not exist`, async () => {
     const ticketId = Types.ObjectId()
@@ -33,13 +34,16 @@ import { Order, OrderStatus } from '../../models/order'
       .expect(400)
   })
 
-  it (`can reserve a ticket`, async () => {
-    const ticket = Ticket.build({
+describe(`success`, () => {
+  let ticket: TicketDoc
+  beforeEach(async () => {
+    ticket = Ticket.build({
       title: 'concert',
       price: 20
     })
     await ticket.save()
-
+  })
+  it (`reserves a ticket`, async () => {
     await request(app)
       .post(`/api/orders`)
       .set(`Cookie`, global.signin())
@@ -47,4 +51,12 @@ import { Order, OrderStatus } from '../../models/order'
       .expect(201)
   })
 
-it.todo (`emits an order created even`)
+  it  (`emits an order created event`, async () => {
+    await request(app)
+      .post(`/api/orders`)
+      .set(`Cookie`, global.signin())
+      .send({ ticketId: ticket.id })
+      .expect(201)
+    expect(stan.client.publish).toHaveBeenCalled()
+  })
+})

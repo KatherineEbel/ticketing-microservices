@@ -1,6 +1,6 @@
 import { connect as conn, Stan } from 'node-nats-streaming'
 
-class NatsClient {
+class Nats {
   private _stan?: Stan
 
   get client() {
@@ -14,7 +14,7 @@ class NatsClient {
     this._stan = conn(clusterId, clientId, { url })
     return new Promise((resolve, reject) => {
       this._stan!.on(`connect`, () => {
-        console.log(`Connected to NATS`)
+        global.console.log(`Connected to NATS`)
         resolve()
       })
       this._stan!.on(`error`, err => reject(err))
@@ -22,4 +22,4 @@ class NatsClient {
   }
 }
 
-export const stan = new NatsClient()
+export const stan = new Nats()

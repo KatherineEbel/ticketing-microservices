@@ -3,6 +3,7 @@ import { app } from '../../app'
 import { Ticket } from '../../models/ticket'
 import { OrderDoc, OrderStatus } from '../../models/order'
 import { Types } from 'mongoose'
+import { stan } from '../../nats-client'
 
 let ticket, order: OrderDoc, user: string[]
 
@@ -59,4 +60,11 @@ it (`sets order status to Cancelled`, async () => {
   expect(updatedOrder.status).toEqual(OrderStatus.Cancelled)
 })
 
-it.todo (`should emit an order updated event`)
+it (`should emit an order updated event`, async () => {
+  await request(app)
+    .patch(`/api/orders/${order.id.toString()}`)
+    .set(`Cookie`, user)
+    .expect(204)
+
+  expect(stan.client.publish).toHaveBeenCalled()
+})
