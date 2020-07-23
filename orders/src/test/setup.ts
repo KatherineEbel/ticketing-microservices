@@ -19,7 +19,7 @@ global.signin = () => {
     id: mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com'
   }
-  const token = jwt.sign(payload, process.env.JWT_KEY!)
+  const token = jwt.sign(payload, global.process.env.JWT_KEY!)
   const session = {
     jwt: token
   }
@@ -34,6 +34,7 @@ beforeAll(async () => {
   await mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
 })
 

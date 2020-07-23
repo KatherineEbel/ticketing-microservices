@@ -1,5 +1,4 @@
 import { Document, model, Model, Schema } from 'mongoose'
-// @ts-ignore
 import { OrderStatus } from '@ke-tickets/common'
 import { TicketDoc } from './ticket'
 
@@ -10,7 +9,7 @@ interface OrderAttrs {
   ticket: TicketDoc
 }
 
-interface OrderDoc extends Document {
+export interface OrderDoc extends Document {
   userId: string
   status: OrderStatus
   expiresAt: Date
@@ -30,7 +29,7 @@ const orderSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: Object.values(OrderStatus),
+    enum: Object.values(<object>OrderStatus),
     default: OrderStatus.Created
   },
   expiresAt: {
@@ -55,5 +54,4 @@ orderSchema.statics.build = (attrs: OrderAttrs) => new Order(attrs)
 orderSchema.statics.ttl = 5 * 60 // amount of time to complete order
 
 const Order = model<OrderDoc, OrderModel>(`Order`, orderSchema)
-
 export { Order, OrderStatus }
