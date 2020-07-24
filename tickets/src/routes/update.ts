@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@ke-tickets/common'
+import { BadRequestError, NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@ke-tickets/common'
 import { Ticket } from '../models/ticket'
 import { body } from 'express-validator'
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher'
@@ -21,6 +21,9 @@ router.put(`/api/tickets/:id`, requireAuth, [
   }
   if (ticket.userId != req.currentUser!.id) {
     throw new NotAuthorizedError()
+  }
+  if (ticket.orderId) {
+    throw new BadRequestError(`Updates for this ticket are locked`)
   }
   const { title, price } = req.body
   ticket.set({ title, price })

@@ -15,11 +15,12 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
 }
 
 // interface describing User Document properties
-interface TicketDoc extends mongoose.Document {
+export interface TicketDoc extends mongoose.Document {
   title: string
   price: number
   userId: string
   version: number
+  orderId?: string
 }
 
 const ticketSchema = new mongoose.Schema({
@@ -34,6 +35,9 @@ const ticketSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
+  },
+  orderId: {
+    type: String,
   },
 }, {
   toJSON: {

@@ -2,6 +2,7 @@ import request from 'supertest'
 import { app } from '../../app'
 import { Types } from 'mongoose'
 import { stan } from '../../nats-client'
+import { Ticket } from '../../models/ticket'
 
 it(`returns 404 if ticket does not exist`, async () => {
   await request(app)
@@ -107,4 +108,29 @@ it (`publishes an event`, async () => {
     })
     .expect(201)
   expect(stan.client.publish).toHaveBeenCalled()
+})
+
+it (`rejects changes when a ticket is reserved`, async () => {
+  const cookie = global.signin()
+  let { body: ticket } = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: `ticket`,
+      price: 20,
+
+    })
+    .expect(201)
+
+  const updatedTicket = await Ticket.findById(ticket.id)
+  await updatedTicket!.set({ orderId: Types.ObjectId().toHexString()}).save()
+
+  await request(app)
+    .put(`/api/tickets/${ticket.id }`)
+    .set(`Cookie`, cookie)
+    .send({
+      title: 'not allowed',
+      price: 50
+    })
+    .expect(400)
 })

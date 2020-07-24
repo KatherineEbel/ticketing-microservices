@@ -1,9 +1,11 @@
 import mongoose from 'mongoose'
 import { app } from './app'
 import { stan } from './nats-client'
+import { OrderCreatedListener } from './events/listeners/order-created-listener'
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
 
 const start = async () => {
-  const { NATS_CLIENT_ID, NATS_URL, NATS_CLUSTER_ID, JWT_KEY, MONGO_URI } = process.env
+  const { NATS_CLIENT_ID, NATS_URL, NATS_CLUSTER_ID, JWT_KEY, MONGO_URI } = global.process.env
   if (!JWT_KEY || !MONGO_URI) {
     throw new Error('JWT_KEY or MONGO_URI not defined')
   }
@@ -14,10 +16,15 @@ const start = async () => {
     await stan.connect(NATS_CLUSTER_ID, NATS_CLIENT_ID, NATS_URL)
     stan.client.on(`close`, () => {
       console.log(`NATS connection close`)
-      process.exit()
+      global.process.exit()
     })
-    process.on(`SIGINT`, () => stan.client.close())
-    process.on(`SIGTERM`, () => stan.client.close())
+
+    global.process.on(`SIGINT`, () => stan.client.close())
+    global.process.on(`SIGTERM`, () => stan.client.close())
+
+    new OrderCreatedListener(stan.client).listen()
+    new OrderCancelledListener(stan.client).listen()
+
     await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
