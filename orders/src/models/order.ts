@@ -1,6 +1,7 @@
 import { Document, model, Model, Schema } from 'mongoose'
 import { OrderStatus } from '@ke-tickets/common'
 import { TicketDoc } from './ticket'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 interface OrderAttrs {
   userId: string
@@ -14,6 +15,7 @@ export interface OrderDoc extends Document {
   status: OrderStatus
   expiresAt: Date
   ticket: TicketDoc
+  version: number
 }
 
 interface OrderModel extends Model<OrderDoc> {
@@ -49,7 +51,8 @@ const orderSchema = new Schema({
 })
 
 
-
+orderSchema.set(`versionKey`, `version`)
+orderSchema.plugin(updateIfCurrentPlugin)
 orderSchema.statics.build = (attrs: OrderAttrs) => new Order(attrs)
 orderSchema.statics.ttl = 5 * 60 // amount of time to complete order
 
