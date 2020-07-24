@@ -4,7 +4,7 @@ import { body } from 'express-validator'
 import { Types } from 'mongoose'
 import { Ticket } from '../models/ticket'
 import { Order, OrderStatus } from '../models/order'
-import { OrderCreatedPublisher } from '../publishers/order-created-publisher'
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher'
 import { stan } from '../nats-client'
 
 const router = express.Router()
@@ -43,6 +43,7 @@ router.post(`/api/orders`,
       id: order.id,
       status: order.status,
       expiresAt: order.expiresAt.toISOString(),
+      version: order.ticket.version,
       ticket: {
         id: order.ticket.id,
         price: order.ticket.price
