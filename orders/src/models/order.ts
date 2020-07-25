@@ -54,7 +54,7 @@ const orderSchema = new Schema({
 orderSchema.set(`versionKey`, `version`)
 orderSchema.plugin(updateIfCurrentPlugin)
 orderSchema.statics.build = (attrs: OrderAttrs) => new Order(attrs)
-orderSchema.statics.ttl = 5 * 60 // amount of time to complete order
+orderSchema.statics.ttl = 20 // amount of time to complete order
 
 const Order = model<OrderDoc, OrderModel>(`Order`, orderSchema)
 export { Order, OrderStatus }

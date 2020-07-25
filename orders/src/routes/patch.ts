@@ -24,7 +24,7 @@ router.patch(`/api/orders/:id`, requireAuth, async (req: Request, res: Response)
 
   await new OrderCancelledPublisher(stan.client).publish({
     ticketId: order.ticket.id,
-    userId: order.userId,
+    orderId: order.id,
     version: order.ticket.version
   })
   res.status(204).send(order)
