@@ -7,8 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - env:
-          JWT_KEY: asdf
       - uses: actions/checkout@v2
       - run: cd auth && npm install && npm run test:ci
         env:
