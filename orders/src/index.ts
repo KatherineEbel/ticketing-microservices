@@ -36,7 +36,8 @@ const start = async () => {
     })
     global.console.log('Mongo connection complete!')
   } catch (e) {
-    global.console.log('Error connecting to auth database: ', e.message)
+    global.console.log('Error connecting to orders database: ', e.message)
+    global.process.exit(1)
   }
 
   app.listen(3000, () => {

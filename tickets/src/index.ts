@@ -33,7 +33,7 @@ const start = async () => {
     })
     console.log('Mongo connection complete!')
   } catch (e) {
-    console.log('Error connecting to auth database: ', e.message)
+    console.log('Error connecting to tickets database: ', e.message)
     global.process.exit(1)
   }
 
