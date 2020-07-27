@@ -29,7 +29,7 @@ router.post('/api/users/signin', [
   const token = jwt.sign({
     id: existingUser.id,
     email: existingUser.email,
-  }, process.env.JWT_KEY!)
+  }, global.process.env.JWT_KEY!)
   // store on session
   req.session = {
     jwt: token,
