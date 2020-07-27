@@ -1,5 +1,5 @@
-import { error } from 'next/dist/build/output/log'
 import React from 'react'
+import Router from 'next/router'
 import useRequest from '../../hooks/use-request'
 
 const TicketShow = ({ ticket }) => {
@@ -9,7 +9,7 @@ const TicketShow = ({ ticket }) => {
     body: {
       ticketId: ticket.id
     },
-    onSuccess: order => console.log(order)
+    onSuccess: order => Router.push(`/orders/[orderId]`, `/orders/${ order.id }`)
   })
   return (
     <div>
@@ -18,7 +18,7 @@ const TicketShow = ({ ticket }) => {
       <p>${ticket.price}</p>
       { errors }
       <button className="btn btn-primary"
-              onClick={doRequest}
+              onClick={() => doRequest()}
       >Purchase</button>
     </div>
   )

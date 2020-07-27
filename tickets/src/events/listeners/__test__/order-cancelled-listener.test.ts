@@ -23,9 +23,9 @@ beforeEach(async () => {
     .save()
 
   data = {
-    userId: ticket.userId,
     version: ticket.version,
     ticketId: ticket.id,
+    orderId: orderId
   }
 
   // @ts-ignore

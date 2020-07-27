@@ -31,13 +31,12 @@ router.post(`/api/orders`,
     const expiresAt = new Date()
     expiresAt.setSeconds(expiresAt.getSeconds() + Order.ttl)
     // Build the order and save it to database
-    const order = Order.build({
+    const order = (await Order.build ({
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt,
       ticket
-    })
-    await order.save()
+    }).save ()).populate(`ticket`)
     // Publish and event about created order
     await new OrderCreatedPublisher(stan.client).publish({
       id: order.id,

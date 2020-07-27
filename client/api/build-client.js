@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default ({ req }) => {
+const buildClient = ({ req }) => {
   if (typeof window === 'undefined') {
     const { headers } = req
     return axios.create({
@@ -13,3 +13,5 @@ export default ({ req }) => {
     })
   }
 }
+
+export default buildClient
