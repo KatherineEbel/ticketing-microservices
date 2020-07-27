@@ -4,6 +4,7 @@ import { TicketDoc } from './ticket'
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 interface OrderAttrs {
+  id?: string
   userId: string
   status: OrderStatus
   expiresAt: Date
@@ -11,6 +12,7 @@ interface OrderAttrs {
 }
 
 export interface OrderDoc extends Document {
+  id: string
   userId: string
   status: OrderStatus
   expiresAt: Date

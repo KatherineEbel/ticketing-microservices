@@ -4,6 +4,7 @@ import { stan } from './nats-client'
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener'
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener'
 import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener'
+import { PaymentCreatedListener } from './events/listeners/payment-created-listener'
 
 const start = async () => {
   const { NATS_CLIENT_ID, NATS_URL, NATS_CLUSTER_ID, JWT_KEY, MONGO_URI } = global.process.env
@@ -26,6 +27,7 @@ const start = async () => {
     new TicketCreatedListener(stanClient).listen()
     new TicketUpdatedListener(stanClient).listen()
     new ExpirationCompleteListener(stanClient).listen()
+    new PaymentCreatedListener(stanClient).listen()
     await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

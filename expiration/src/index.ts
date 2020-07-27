@@ -13,14 +13,13 @@ const start = async () => {
       console.log(`NATS connection close`)
       global.process.exit()
     })
-
     new OrderCreatedListener(stan.client).listen()
 
     global.process.on(`SIGINT`, () => stan.client.close())
     global.process.on(`SIGTERM`, () => stan.client.close())
 
   } catch (e) {
-    console.log('Error connecting to auth database: ', e.message)
+    console.log('Error connecting to nats server', e.message)
   }
 }
 
