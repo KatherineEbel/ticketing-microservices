@@ -11,3 +11,4 @@ jobs:
       - run: cd payments && npm install && npm run test:ci
         env:
           JWT_KEY: asdf
+          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
