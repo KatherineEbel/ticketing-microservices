@@ -5,7 +5,6 @@ import { TicketCreatedListener } from './events/listeners/ticket-created-listene
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener'
 import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener'
 import { PaymentCreatedListener } from './events/listeners/payment-created-listener'
-import construct = Reflect.construct
 
 const start = async () => {
   const { NATS_CLIENT_ID, NATS_URL, NATS_CLUSTER_ID, JWT_KEY, MONGO_URI } = global.process.env
