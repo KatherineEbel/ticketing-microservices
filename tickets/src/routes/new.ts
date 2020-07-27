@@ -16,8 +16,7 @@ router.post(`/api/tickets`, requireAuth, [
     .withMessage(`Price must be greater than 0`)
 ], validateRequest, async (req:Request, res:Response) => {
   const { title, price } = req.body
-  const ticket = Ticket.build({title, price, userId: req.currentUser!.id })
-  await ticket.save()
+  const ticket = await Ticket.build({title, price, userId: req.currentUser!.id }).save()
   await new TicketCreatedPublisher(stan.client).publish({
     id: ticket.id,
     title: ticket.title,
