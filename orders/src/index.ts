@@ -45,4 +45,4 @@ const start = async () => {
   })
 }
 
-start().then(() => {})
+start().then(() => global.console.log(`Started`))
