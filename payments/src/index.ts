@@ -5,8 +5,8 @@ import { OrderCreatedListener } from './events/listeners/order-created-listener'
 import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
 
 const start = async () => {
-  const { NATS_CLIENT_ID, NATS_URL, NATS_CLUSTER_ID, JWT_KEY, MONGO_URI } = global.process.env
-  if (!JWT_KEY || !MONGO_URI) {
+  const { NATS_CLIENT_ID, NATS_URL, NATS_CLUSTER_ID, JWT_KEY, MONGO_URI, STRIPE_KEY } = global.process.env
+  if (!JWT_KEY || !MONGO_URI || !STRIPE_KEY) {
     throw new Error('JWT_KEY or MONGO_URI not defined')
   }
   if (!NATS_CLIENT_ID || !NATS_URL || !NATS_CLUSTER_ID) {
