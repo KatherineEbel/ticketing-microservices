@@ -11,7 +11,7 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     })
-    console.log('Mongo connection complete!')
+    console.log('Mongo connection complete!!')
   } catch (e) {
     console.log('Error connecting to auth database: ', e.message)
     global.process.exit(1)

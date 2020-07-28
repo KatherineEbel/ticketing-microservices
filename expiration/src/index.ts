@@ -19,7 +19,7 @@ const start = async () => {
     global.process.on(`SIGTERM`, () => stan.client.close())
 
   } catch (e) {
-    console.log('Error connecting to nats server', e.message)
+    console.log('Error connecting to nats server!!', e.message)
   }
 }
 
