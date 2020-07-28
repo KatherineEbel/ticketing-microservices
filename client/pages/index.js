@@ -5,7 +5,7 @@ const LandingPage = ({ currentUser, tickets }) => {
   return (
     <div className="container">
       { currentUser ? <p>Signed in as { currentUser.email }</p> : <p>You are signed out</p>}
-      <h1>Tickets</h1>
+      <h2>Tickets</h2>
       { tickets.length > 0 ? (
         <div className="row row-cols-1 row-cols-md-2 g-4">
           { tickets.map(t => (
